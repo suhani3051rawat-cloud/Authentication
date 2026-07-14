@@ -143,7 +143,11 @@ export const getCurrentUser = async (req,res) =>{
             })
         }  
         res.json({
+<<<<<<< HEAD
             message : "User logged in",
+=======
+            message : "User in dataBase",
+>>>>>>> f8b2133855bd5a5b1a949d1d9dd60415c49631d7
             user    : findUser
         }); 
     } 
