@@ -149,7 +149,7 @@ export const getCurrentUser = async (req,res) =>{
     } 
     catch (error) {
        return res.json({
-         message : error.message
+          message : error.message
        }) 
     }  
 }
