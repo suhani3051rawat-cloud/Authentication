@@ -11,21 +11,21 @@ let result = [
       (req, res, next)=>{
       let errors =  validationResult(req)
       try{
-        if(!errors.isEmpty()){
-            return res.json({
-                message : "Enter valid details",
-                err     : errors.array().map((e)=>e.msg)
-            });
-        } 
+       if (!errors.isEmpty()) {
+          return res.status(400).json({
+            message: "Enter valid details",
+            err: errors.array().map((e) => e.msg)
+          });
       }
-      catch(err){
-        return res.json({
-            message : "user not registered",
-            error   : errors  
+      }
+      catch (err) {
+        return res.status(500).json({
+          message: "User not registered",
+          error: err.message
         });
       }
-    next()  
-    }
+      next()  
+      }
     ]
  export {
     result,

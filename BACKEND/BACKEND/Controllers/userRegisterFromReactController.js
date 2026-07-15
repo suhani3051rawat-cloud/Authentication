@@ -9,7 +9,7 @@ export const userFromReact = async (req,res)=>{
         email,
     });
     if(findUser){
-        return res.json({
+         return res.status(400).json({
             message : "Email already exist"
         });
     }
@@ -24,8 +24,8 @@ export const userFromReact = async (req,res)=>{
             }   
         }
         if(!phone_numberCheck(phone_number)){
-            return res.json({
-                message : " please enter a valid phone_number"
+            return res.status(400).json({
+                message : "Please enter a valid phone number"
             });
         }
     let hashPassword = await bcrypt.hash(password,10);
@@ -40,7 +40,7 @@ export const userFromReact = async (req,res)=>{
     let hideFields =  await userModel.aggregate([
         {
             $match: {
-                id : user._id
+                _id : user._id
             }
         },
         {
@@ -51,16 +51,16 @@ export const userFromReact = async (req,res)=>{
         }
     ]);
     return res.json({
-        Message : "User register successfully",
+        message : "User register successfully",
         Data    :  hideFields
     });
     console.log(user);
     } 
     catch (error) {
         console.log(error);
-        return res.json({
-            Message : "user not Register",
-            error : error
+       return res.status(500).json({
+            message : "User not Register",
+            error : error.message
         });
     }
 }
@@ -71,13 +71,13 @@ export const userLoginFromReact = async (req,res)=>{
             email
         });
         if(!findUser){
-            return res.json({
+            return res.status(500).json({
                  message : "User not found"
             });
         }
         let passwordCheck = await bcrypt.compare(password, findUser.password);
         if(!passwordCheck){
-            return res.json({
+            return res.status(400).json({
                 message : "Incorrect password"
             });
         }

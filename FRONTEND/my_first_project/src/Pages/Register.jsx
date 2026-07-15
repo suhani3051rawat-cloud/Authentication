@@ -3,8 +3,10 @@ import { useState, useEffect} from 'react'
 import { LoginRoute } from './LoginRoute';
 import  axios  from 'axios';
 import '../style/App.css';
+import {userRegister} from '../Store/userRegisterSlice'
+import { Link, useNavigate} from 'react-router-dom';
 import { UserRegisterValidation } from '../utils/UserRegisterValidation';
-import { useNavigate, Link } from 'react-router-dom';
+import { useSelector,useDispatch } from 'react-redux';
 export function Register() {
   let [formData , setFormData] = useState({
                                   name :"",
@@ -17,6 +19,7 @@ export function Register() {
   let [error, setError] = useState({});
   let [showMessage, setShowMessage] = useState([]);
   let navigate = useNavigate();
+  const dispatch = useDispatch();
   let fromSubmit = async (e)=>{
     e.preventDefault(); 
     let validtionResult = UserRegisterValidation(formData);
@@ -25,25 +28,35 @@ export function Register() {
       console.log(error);
       return;
     }
-     try {  
-      let response  = await axios.post("http://localhost:4000/api/auth/user/register",
-       formData
-      )
-      if(!response.data.message){
-        if(!response.data.err){
-         alert('User register successfully');
-          navigate('/user/login');
-        }
+   let result = await dispatch(userRegister(formData))
+   console.log(result.payload)
+   console.log(result.type)
+    //  try {  
+    //   let response  = await axios.post("http://localhost:4000/api/auth/user/register",
+    //    formData
+    //   )
+    //   if(!response.data.message){
+    //     if(!response.data.err){
+    //      alert('User register successfully');
+    //       navigate('/user/login');
+    //     }
+    //   }
+    //   else {
+    //     setShowMessage(response.data.message || response.data.err); 
+    //     console.log(showMessage);
+    //   }
+    //  } catch (error){
+    //   console.log("something went wrong",error);
+    //  }
+   if (userRegister.rejected.match(result)) {
+    setShowMessage(result.payload.message);
+   }
+    if(userRegister.fulfilled.match(result)){
+        alert(result.payload.message);
+        navigate("/user/login");
       }
-      else {
-        setShowMessage(response.data.message || response.data.err); 
-        console.log(showMessage);
-      }
-     } catch (error){
-      console.log("something went wrong",error);
-     }
-    } 
-
+    console.log('name :', formData.name);
+    }
   let DataChange = (e)=>{
      setFormData({...formData,[e.target.name] : e.target.value});
   }
