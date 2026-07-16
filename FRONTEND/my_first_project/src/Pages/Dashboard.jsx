@@ -2,7 +2,7 @@ import {useEffect} from 'react';
 import {useState} from 'react';
 import axios from 'axios';
 import {Route, useNavigate} from 'react-router-dom';
-import { userLogout } from '../Store/userLogoutSlice';
+import { userLogout } from '../Store/userLogout';
 import { useDispatch } from 'react-redux';
 
 export const Dashboard = ()=>{
